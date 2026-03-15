@@ -42,7 +42,6 @@ int main()
     printf("enter the size of array: ");
     scanf("%d", &n);
 
-    // Declare the VLA *after* n is initialized
     float arr[n];
 
     input(n, arr);
