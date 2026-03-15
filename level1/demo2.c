@@ -68,4 +68,7 @@ int main()
     r3.area = calculate_area(r3);
 
     compare_areas(r1,r2,r3);
+
+    return 0;
+
 }
