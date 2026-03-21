@@ -22,13 +22,10 @@ void writeToTextFile(Student students[], int n, const char *filename);
 int readFromTextFile(Student students[], const char *filename);
 void printStudents(Student students[], int n);
 
-int n;  
-
 void inputStudents(Student students[], int n){
     int i;
-    printf("Enter student details\n");
     for(i=0;i<n;i++){
-        printf("Student %d:\n",i+1);
+        printf("Enter id, name and marks:\n");
         scanf("%d %s %f",&students[i].id,students[i].name,&students[i].marks);
     }
 }
@@ -36,9 +33,14 @@ void inputStudents(Student students[], int n){
 void writeToTextFile(Student students[], int n, const char *filename){
     FILE *fp = fopen(filename,"w");
 
+    if(fp == NULL){
+        printf("Error opening file\n");
+        return;
+    }
+
     int i;
     for(i=0;i<n;i++){
-        fprintf(fp,"%d %s %f\n",
+        fprintf(fp,"%d %s %.2f\n",
                 students[i].id,
                 students[i].name,
                 students[i].marks);
@@ -50,21 +52,26 @@ void writeToTextFile(Student students[], int n, const char *filename){
 int readFromTextFile(Student students[], const char *filename){
     FILE *fp = fopen(filename,"r");
 
-    int i;
-    for(i=0;i<n;i++){
-        fscanf(fp,"%d %s %f",
-               &students[i].id,
-               students[i].name,
-               &students[i].marks);
+    if(fp == NULL){
+        printf("Error opening file\n");
+        return 0;
+    }
+
+    int i = 0;
+
+    while(fscanf(fp,"%d %s %f",
+          &students[i].id,
+          students[i].name,
+          &students[i].marks) == 3){
+        i++;
     }
 
     fclose(fp);
-    return n;
+    return i;
 }
 
 void printStudents(Student students[], int n){
     int i;
-    printf("\nStudent data:\n");
     for(i=0;i<n;i++){
         printf("%d %s %.2f\n",
                students[i].id,
@@ -74,6 +81,8 @@ void printStudents(Student students[], int n){
 }
 
 int main(){
+    int n;
+
     printf("Enter number of students:\n");
     scanf("%d",&n);
 
@@ -84,6 +93,7 @@ int main(){
 
     int count = readFromTextFile(s2,"students.txt");
 
+    printf("\nData read from file:\n");
     printStudents(s2,count);
 
     return 0;
