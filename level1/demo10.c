@@ -17,38 +17,70 @@ typedef struct{
     float marks;
 } Student;
 
+void inputStudents(Student students[], int n);
+void writeToBinaryFile(Student students[], int n, const char *filename);
+int readFromBinaryFile(Student students[], const char *filename);
+void printStudents(Student students[], int n);
+
+void inputStudents(Student students[], int n){
+    int i;
+    for(i=0;i<n;i++){
+        printf("student %d:\n",i+1);
+        scanf("%d %s %f",&students[i].id,students[i].name,&students[i].marks);
+    }
+}
+
+void writeToBinaryFile(Student students[], int n, const char *filename){
+    FILE *fp = fopen(filename,"wb");
+
+    if(fp == NULL){
+        printf("file error\n");
+        return;
+    }
+
+    fwrite(students,sizeof(Student),n,fp);
+
+    fclose(fp);
+}
+
+int readFromBinaryFile(Student students[], const char *filename){
+    FILE *fp = fopen(filename,"rb");
+
+    if(fp == NULL){
+        printf("file error\n");
+        return 0;
+    }
+
+    int count = fread(students,sizeof(Student),100,fp);
+
+    fclose(fp);
+    return count;
+}
+
+void printStudents(Student students[], int n){
+    int i;
+    for(i=0;i<n;i++){
+        printf("%d %s %.2f\n",
+               students[i].id,
+               students[i].name,
+               students[i].marks);
+    }
+}
+
 int main(){
-    int n,i;
+    int n;
 
     printf("enter number of students:\n");
     scanf("%d",&n);
 
     Student s1[100], s2[100];
 
-    for(i=0;i<n;i++){
-        printf("enter id name marks:\n");
-        scanf("%d %s %f",&s1[i].id,s1[i].name,&s1[i].marks);
-    }
+    inputStudents(s1,n);
+    writeToBinaryFile(s1,n,"students.dat");
 
-    FILE *fp = fopen("students.dat","wb");
+    int count = readFromBinaryFile(s2,"students.dat");
 
-    for(i=0;i<n;i++){
-        fwrite(&s1[i],sizeof(Student),1,fp);
-    }
-
-    fclose(fp);
-
-    fp = fopen("students.dat","rb");
-
-    for(i=0;i<n;i++){
-        fread(&s2[i],sizeof(Student),1,fp);
-    }
-
-    fclose(fp);
-
-    for(i=0;i<n;i++){
-        printf("%d %s %.2f\n",s2[i].id,s2[i].name,s2[i].marks);
-    }
+    printStudents(s2,count);
 
     return 0;
 }

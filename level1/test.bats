@@ -1,21 +1,24 @@
 #!/usr/bin/env bats
 
-@test "normal test" {
-    run ./demo7 <<< "3
-10
-20
-30"
+@test "normal input test" {
+    run ./demo9 <<< "3
+1 A 10
+2 B 20
+3 C 30"
     [ "$status" -eq 0 ]
-    [[ "$output" == *"60"* ]]
+    [[ "$output" == *"1 A 10"* ]]
+    [[ "$output" == *"2 B 20"* ]]
+    [[ "$output" == *"3 C 30"* ]]
 }
 
-@test "single player" {
-    run ./demo7 <<< "1
-50"
-    [[ "$output" == *"50"* ]]
+@test "single student test" {
+    run ./demo9 <<< "1
+5 X 50"
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"5 X 50"* ]]
 }
 
-@test "zero player" {
-    run ./demo7 <<< "0"
-    [[ "$output" == *"no players"* ]]
+@test "zero student test" {
+    run ./demo9 <<< "0"
+    [ "$status" -eq 0 ]
 }
