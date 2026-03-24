@@ -1,0 +1,5 @@
+1..4
+ok 1 normal temperature test
+ok 2 all same values
+ok 3 negative temperatures
+ok 4 mixed values
