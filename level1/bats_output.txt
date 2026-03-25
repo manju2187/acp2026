@@ -1,5 +1,7 @@
 1..4
-ok 1 normal temperature test
-ok 2 all same values
-ok 3 negative temperatures
-ok 4 mixed values
+ok 1 normal case below 50 (free scheme)
+ok 2 between 50 and 100 (normal billing)
+not ok 3 above 100 (extra charge applied)
+# (in test file test.bats, line 21)
+#   `[[ "$output" == *"High consumption alert"* ]]' failed
+ok 4 edge case exactly 100 units
