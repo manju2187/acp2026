@@ -12,65 +12,63 @@ Function Prototypes:
 #include<stdio.h>
 
 typedef struct{
-    int empID;
+    int emID;
     char name[20];
-    int basicsalary;
+    float basesalary;
 }Employee;
 
-void inputEmployees(Employee e[], int n){
+void input(Employee e[], int n){
     for(int i=0;i<n;i++){
-        printf("enter the ID of employee %d\n",i+1);
-        scanf("%d", &e[i].empID);
-
-        printf("enter the name of employee %d\n", i+1);
+        printf("enter the employee ID of the %d employee",i+1);
+        scanf("%d", &e[i].emID);
+        printf("enter the employee name of the %d employee", i+1);
         scanf("%s", e[i].name);
-
-        printf("enter the basic salary of employee %d\n", i+1);
-        scanf("%d", &e[i].basicsalary);
+        printf("enter the base salary of the %d employee",i+1);
+        scanf("%f", &e[i].basesalary);
     }
 }
 
-void writeToTextFile(Employee e[], int n, const char *filename){
+void writetofile(Employee e[], int n, const char *filename){
     FILE *fp = fopen(filename,"w");
 
-    if(fp==NULL){
-        printf("file error\n");
-        return;
+    if (fp==NULL){
+        printf("empty invalid");
+        return ;
     }
 
     for(int i=0;i<n;i++){
-        fprintf(fp,"%d %s %d\n", e[i].empID, e[i].name, e[i].basicsalary);
+        fprintf(fp,"%d %s %.2f \n",e[i].emID,e[i].name,e[i].basesalary);
     }
 
     fclose(fp);
 }
 
-float calculateTotalPayroll(const char *filename){
+float calculatePay(const char *filename){
     FILE *fp = fopen(filename,"r");
 
     if(fp==NULL){
-        printf("file error\n");
+        printf("invalid file");
         return 0;
     }
 
-    int empID;
+    int emID;
     char name[20];
-    int basicsalary;
-    float total = 0;
+    float basicsalary;
+    float total;
 
-    while(fscanf(fp,"%d %s %d", &empID, name, &basicsalary) == 3){
+    while(fscanf(fp,"%d %s %f",&emID, &name, &basicsalary)==3){
         total += basicsalary;
     }
-
     fclose(fp);
     return total;
 }
 
-void displayExpenditure(float total){
-    printf("total salary expenditure = %.2f\n", total);
+void display(float total){
+    printf("the total salary expenditure is %.2f\n",total);
 }
 
 int main()
+
 {
     int n;
     Employee e[100];
@@ -79,12 +77,11 @@ int main()
     printf("enter the number of employees\n");
     scanf("%d", &n);
 
-    inputEmployees(e, n);
-    writeToTextFile(e, n, "payroll.txt");
-
-    total = calculateTotalPayroll("payroll.txt");
-
-    displayExpenditure(total);
+    input(e,n);
+    writetofile(e,n,"payroll.txt");
+    total = calculatePay("payroll.txt");
+    display(total);
 
     return 0;
 }
+
